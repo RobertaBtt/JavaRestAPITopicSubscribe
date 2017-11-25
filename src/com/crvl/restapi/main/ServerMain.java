@@ -1,9 +1,13 @@
 package com.crvl.restapi.main;
+import org.json.JSONObject;
 import org.restlet.Component;
+import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
 import org.restlet.Server;
 
+import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
@@ -33,28 +37,37 @@ public class ServerMain extends ServerResource {
     	
     	component.getDefaultHost().attach("/", ServerMain.class);
     	component.getDefaultHost().attach("/v/{version}", ServerMain.class);
-    	
+    	new ServerResourceContainerV0(component);
+    	new ServerResourceContainerV1(component);
     	component.start();
 
 
     }
     
     @Get
-    public void mainProxy(){
+    public Representation mainProxy(){
     	
     	String version = getVersion(getReference());
     	
-    	if (version.equals("0")) 
-    		{new ServerResourceContainerV0(component);
-    		System.out.print("Versione trovata: 0");}
+    	JSONObject testJson = new JSONObject();
     	
-    	else if(version.equals("1")) 
-    		{ System.out.print("Versione trovata: 1");
-    		new ServerResourceContainerV1(component);}    	
-    	
-    	else 		
-    		// Default Behavior: get the most recent API version
-    		new ServerResourceContainerV1(component);    	
+        testJson.put("status", "ok");
+        testJson.put("code", "200");
+        testJson.put("message", "");
+        
+        
+        JSONObject jsonVersion = new JSONObject();
+        jsonVersion.put("version", version);
+        
+        testJson.put("result", jsonVersion);
+        
+        Representation result = new StringRepresentation(testJson.toString());
+        
+        result.setMediaType(MediaType.APPLICATION_JSON);        
+        
+        return result;
+    
+            	
     }
     
 
