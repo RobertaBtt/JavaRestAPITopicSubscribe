@@ -13,35 +13,45 @@ import org.restlet.resource.ServerResource;
 
 import com.crvl.restapi.server.container.ServerResourceContainerV0;
 import com.crvl.restapi.server.container.ServerResourceContainerV1;
-import com.crvl.restapi.server.resource.VersionResource;
 
 public class ServerMain extends ServerResource {
 
     private static Component component;
     public static void main(String[] args) throws Exception {
     	
-    	String port = "";
+    	Server server;    	
+		server = new Server(Protocol.HTTP, getPort(args));    	
+		initComponent(server);
+		
+    }
+    
+    public static int getPort(String[] args){
+    	int port=8082;
+    	
     	if (args.length >0){
-    		port = args[0];
-    	}
+    		
+    		//Check if parameter is numeric
+		 try  { port = Integer.parseInt(args[0]);}  
+		  catch(NumberFormatException nfe) { }  		  
+    	}	
+    	return port;
+    }
+    
+    public static void initComponent(Server server){
     	
-    	Server server;
-    	if (port != ""){
-    		server = new Server(Protocol.HTTP, port);
-    	}			
-    	else
-    		server = new Server(Protocol.HTTP, 8084); //default port
-    	
-		component = new Component();    	
+    	component = new Component();    	
     	component.getServers().add(server);
     	
     	component.getDefaultHost().attach("/", ServerMain.class);
     	component.getDefaultHost().attach("/v/{version}", ServerMain.class);
     	new ServerResourceContainerV0(component);
     	new ServerResourceContainerV1(component);
-    	component.start();
+    	try {
+			component.start();
+		} catch (Exception e) {System.out.println("Error init restlet component" + e.getMessage());
+		}
 
-
+    	
     }
     
     @Get
@@ -73,10 +83,16 @@ public class ServerMain extends ServerResource {
 
     
     public String getVersion(Reference reference){
-    	String url = reference.toString();
     	
-    	String version = url.substring(url.indexOf("/v/")+3, url.indexOf("/v/")+4);
-    	System.out.println("Version: "+version);
+    	String url = reference.toString();
+    	String version;
+    	try{
+    		version = url.substring(url.indexOf("/v/")+3, url.indexOf("/v/")+4);
+    	}
+    	catch(StringIndexOutOfBoundsException e){
+    		version = "1";
+    	}
+    	
     	return version;
     }
 
