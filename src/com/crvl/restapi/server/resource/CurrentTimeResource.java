@@ -1,3 +1,4 @@
+package com.crvl.restapi.server.resource;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
