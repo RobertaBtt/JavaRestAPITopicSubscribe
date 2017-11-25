@@ -28,7 +28,7 @@ public class ServerMain extends ServerResource {
     public static int getPort(String[] args){
     	int port=8082;
     	
-    	if (args.length >0){
+    	if (args != null && args.length >0){
     		
     		//Check if parameter is numeric
 		 try  { port = Integer.parseInt(args[0]);}  
@@ -48,8 +48,7 @@ public class ServerMain extends ServerResource {
     	new ServerResourceContainerV1(component);
     	try {
 			component.start();
-		} catch (Exception e) {System.out.println("Error init restlet component" + e.getMessage());
-		}
+		} catch (Exception e) {System.out.println("Error init restlet component" + e.getMessage());	}
 
     	
     }
@@ -83,13 +82,18 @@ public class ServerMain extends ServerResource {
 
     
     public String getVersion(Reference reference){
-    	
-    	String url = reference.toString();
     	String version;
-    	try{
-    		version = url.substring(url.indexOf("/v/")+3, url.indexOf("/v/")+4);
+    	if (reference != null){
+    		String url = reference.toString();
+    		
+	    	try{
+	    		version = url.substring(url.indexOf("/v/")+3, url.indexOf("/v/")+4);
+	    	}
+	    	catch(StringIndexOutOfBoundsException e){
+	    		version = "1";
+	    	}
     	}
-    	catch(StringIndexOutOfBoundsException e){
+    	else{
     		version = "1";
     	}
     	
