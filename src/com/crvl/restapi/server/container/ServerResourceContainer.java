@@ -1,28 +1,47 @@
 package com.crvl.restapi.server.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.restlet.data.Reference;
 
-public abstract class ServerResourceContainer {
+public  class ServerResourceContainer {
 
-	public abstract String getVersion();
+	private List<IAPIResource> apiResourceList = new ArrayList<IAPIResource>();
+	
+	
+	private String getNewestAPIVersion(){
+		return "1";
+	}
+	
+	public void addAPIResource(IAPIResource apiResourceClass){
+		apiResourceList.add(apiResourceClass);
+	}
+	
 	
 	public String getVersionFromRequest(Reference reference){
 		
 		String version;
     	if (reference != null){
-    		String url = reference.toString();
     		
 	    	try{
-	    		if (url.indexOf("/") != -1)
-	    			version = url.substring(url.indexOf("/")+5, url.indexOf("/")+6);
-	    		else version = "1";
+	    		List<String> segments = reference.getSegments();
+	    		if (segments.size() > 0){
+	    			if (segments.size() == 1)
+	    				version = getNewestAPIVersion();
+	    			else
+    					version = segments.get(1);
+	    		}
+	    		else
+	    			version = getNewestAPIVersion();
+	    	
 	    	}
-	    	catch(StringIndexOutOfBoundsException e){
-	    		version = "1";
+	    	catch(Exception e){
+	    		version = getNewestAPIVersion();
 	    	}
     	}
     	else{
-    		version = "1";
+    		version = getNewestAPIVersion();
     	}
     	
     	return version;

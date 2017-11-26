@@ -14,8 +14,9 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 import com.crvl.restapi.model.JSONMessageRepresentation;
-import com.crvl.restapi.server.container.ServerResourceContainerV0;
-import com.crvl.restapi.server.container.ServerResourceContainerV1;
+import com.crvl.restapi.server.container.APIResourceVersion0;
+import com.crvl.restapi.server.container.APIResourceVersion1;
+import com.crvl.restapi.server.container.ServerResourceContainer;
 
 
 public class ServerMain extends ServerResource {
@@ -23,11 +24,18 @@ public class ServerMain extends ServerResource {
 	final static int DEFAULTPORT = 8082;
 	
     private static Component component;
+    private static ServerResourceContainer serverResourceContainer;
+    
     public static void main(String[] args) throws Exception {
 	
     	Server server;    	
 		server = new Server(Protocol.HTTP, getPort(args));    	
-		initComponent(server); 
+		component = initComponent(server); 
+		component = initAPIContainer(component);
+		
+		try {
+			component.start();
+		} catch (Exception e) {System.out.println("Error init restlet component" + e.getMessage());	}
 		
     }
     
@@ -41,26 +49,25 @@ public class ServerMain extends ServerResource {
     	return port;
     }
     
-    public static void initComponent(Server server){
-    	
+    public static Component initComponent(Server server){    	
     	component = new Component();    	
-    	component.getServers().add(server);
-    	
+    	component.getServers().add(server);    	
     	component.getDefaultHost().attach("/", ServerMain.class);
     	component.getDefaultHost().attach("/v/{version}", ServerMain.class);
-    	new ServerResourceContainerV0(component);
-    	new ServerResourceContainerV1(component);
-    	try {
-			component.start();
-		} catch (Exception e) {System.out.println("Error init restlet component" + e.getMessage());	}
-
-    	
+    	return component;    	
+    }
+    
+    public static Component initAPIContainer(Component component){
+    	serverResourceContainer = new ServerResourceContainer();    	
+    	serverResourceContainer.addAPIResource(new APIResourceVersion0(component));
+    	serverResourceContainer.addAPIResource(new APIResourceVersion1(component));
+    	return component;
     }
     
     @Get
-    public Representation mainProxy(){
+    public Representation mainProxy(){     	
     	
-    	String version = getVersion(getReference());    	
+    	String version = serverResourceContainer.getVersionFromRequest(getReference());    	
     	JSONObject data  = new JSONObject();
     	data.put("version", version);    	
     	Status status = Status.SUCCESS_OK;
@@ -68,30 +75,7 @@ public class ServerMain extends ServerResource {
     	JSONMessageRepresentation message = new JSONMessageRepresentation(status, data);    	    
         Representation result = new StringRepresentation(message.getJsonObjectResponse().toString());        
         result.setMediaType(MediaType.APPLICATION_JSON);
-        return result;
-            	
+        return result;            	
     }
-    
-
-    
-    public String getVersion(Reference reference){
-    	String version;
-    	if (reference != null){
-    		String url = reference.toString();
-    		
-	    	try{
-	    		version = url.substring(url.indexOf("/v/")+3, url.indexOf("/v/")+4);
-	    	}
-	    	catch(StringIndexOutOfBoundsException e){
-	    		version = "1";
-	    	}
-    	}
-    	else{
-    		version = "1";
-    	}
-    	
-    	return version;
-    }
-
 
 }

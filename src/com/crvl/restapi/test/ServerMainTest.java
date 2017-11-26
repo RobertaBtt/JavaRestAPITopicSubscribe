@@ -57,10 +57,6 @@ public class ServerMainTest {
 		assertEquals(res, repr.toString());
 	}
 
-	@Test
-	public void testGetVersion() {
-		assertEquals("1", serverMain.getVersion(null));
-	}
-	
+
 	 
 }
