@@ -4,6 +4,8 @@ import org.restlet.Component;
 import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
+import org.restlet.engine.connector.HttpProtocolHelper;
 import org.restlet.Server;
 
 import org.restlet.representation.Representation;
@@ -11,27 +13,29 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
+import com.crvl.restapi.model.JSONMessageRepresentation;
 import com.crvl.restapi.server.container.ServerResourceContainerV0;
 import com.crvl.restapi.server.container.ServerResourceContainerV1;
 
-public class ServerMain extends ServerResource {
 
+public class ServerMain extends ServerResource {
+	
+	final static int DEFAULTPORT = 8082;
+	
     private static Component component;
     public static void main(String[] args) throws Exception {
-    	
+	
     	Server server;    	
 		server = new Server(Protocol.HTTP, getPort(args));    	
-		initComponent(server);
+		initComponent(server); 
 		
     }
     
     public static int getPort(String[] args){
-    	int port=8082;
+    	int port=DEFAULTPORT;
     	
     	if (args != null && args.length >0){
-    		
-    		//Check if parameter is numeric
-		 try  { port = Integer.parseInt(args[0]);}  
+		 try  { port = Integer.parseInt(args[0]);}  //Check if parameter is numeric
 		  catch(NumberFormatException nfe) { }  		  
     	}	
     	return port;
@@ -56,26 +60,15 @@ public class ServerMain extends ServerResource {
     @Get
     public Representation mainProxy(){
     	
-    	String version = getVersion(getReference());
+    	String version = getVersion(getReference());    	
+    	JSONObject data  = new JSONObject();
+    	data.put("version", version);    	
+    	Status status = Status.SUCCESS_OK;
     	
-    	JSONObject testJson = new JSONObject();
-    	
-        testJson.put("status", "ok");
-        testJson.put("code", "200");
-        testJson.put("message", "");
-        
-        
-        JSONObject jsonVersion = new JSONObject();
-        jsonVersion.put("version", version);
-        
-        testJson.put("result", jsonVersion);
-        
-        Representation result = new StringRepresentation(testJson.toString());
-        
-        result.setMediaType(MediaType.APPLICATION_JSON);        
-        
+    	JSONMessageRepresentation message = new JSONMessageRepresentation(status, data);    	    
+        Representation result = new StringRepresentation(message.getJsonObjectResponse().toString());        
+        result.setMediaType(MediaType.APPLICATION_JSON);
         return result;
-    
             	
     }
     

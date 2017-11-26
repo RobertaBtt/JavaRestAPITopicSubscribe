@@ -1,0 +1,36 @@
+{
+	"identification": "SRV_01",
+	"description": "Survey about 01",
+	"questions": [{
+			"question1": "What is your name?"
+		},
+		{
+			"question2": "How many countries did you visit last 5 years?",
+			"answers": [{
+					"answer1": "None"
+				},
+				{
+					"answer2": "1-3"
+				},
+				{
+					"answer3": "More than 3"
+				}
+			]
+		},
+		{
+			"question3": "Are you happy to apply to this position ?",
+			"answers": [{
+					"answer1": "Yes, definetly"
+				},
+				{
+					"answer2": "Yes"
+				},
+				{
+					"answer3": "Yes, a lot"
+				}
+			]
+
+		}
+
+	]
+}
