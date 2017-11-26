@@ -22,6 +22,7 @@ import com.crvl.restapi.server.container.ServerResourceContainer;
 public class ServerMain extends ServerResource {
 	
 	final static int DEFAULTPORT = 8082;
+	public final static MediaType MEDIA_TYPE = MediaType.APPLICATION_JSON;
 	
     private static Component component;
     private static ServerResourceContainer serverResourceContainer;
@@ -57,25 +58,29 @@ public class ServerMain extends ServerResource {
     	return component;    	
     }
     
+    //We can manage request from two different version of the API. 0 and 1 (the newest)
     public static Component initAPIContainer(Component component){
-    	serverResourceContainer = new ServerResourceContainer();    	
+    	serverResourceContainer = ServerResourceContainer.getInstance();    	
     	serverResourceContainer.addAPIResource(new APIResourceVersion0(component));
     	serverResourceContainer.addAPIResource(new APIResourceVersion1(component));
     	return component;
     }
     
+    
     @Get
-    public Representation mainProxy(){     	
+    public Representation mainProxy(){
+    	/***
+    	 * Without parameters, home returns a Json that contains current Version of API
+    	 * This method is intended to be like a mock.
+    	 */
     	
-    	String version = serverResourceContainer.getVersionFromRequest(getReference());    	
-    	JSONObject data  = new JSONObject();
-    	data.put("version", version);    	
-    	Status status = Status.SUCCESS_OK;
+    	String version = serverResourceContainer.getVersionFromRequest(getReference());
     	
-    	JSONMessageRepresentation message = new JSONMessageRepresentation(status, data);    	    
-        Representation result = new StringRepresentation(message.getJsonObjectResponse().toString());        
-        result.setMediaType(MediaType.APPLICATION_JSON);
-        return result;            	
+    	JSONObject data  = new JSONObject();    	
+    	data.put("version", version);/*Data: version requested. does not mean it exists.*/    	
+    	Status status = Status.SUCCESS_OK;/*Status: always success*/
+    	    	
+        return serverResourceContainer.packResult(status, data, MEDIA_TYPE);            	
     }
 
 }

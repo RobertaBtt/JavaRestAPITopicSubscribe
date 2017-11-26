@@ -1,0 +1,29 @@
+{
+	"identification": "SRV_03",
+	"description": "Topic of the Survey: 03",
+	"questions": [{
+			"question1": "Have you ever been in Barcelona?",
+			"answers": [{
+					"answer1": "Yes"
+				},
+				{
+					"answer1": "No"
+				}
+			]
+		},
+		{
+			"question2": "Is this survey funny ?",
+			"answers": [{
+					"answer1": "Let me go to the end"
+				},
+				{
+					"answer2": "Yes"
+				},
+				{
+					"answer3": "No"
+				}
+			]
+		}
+
+	]
+}

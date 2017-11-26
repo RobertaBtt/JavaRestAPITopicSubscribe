@@ -19,17 +19,17 @@ public class ServerResourceContainerTest {
 	private String URL4 = "http://localhost:8082/v";
 	private String URL5 = "http://localhost:8082/v/3";
 	
+	private Component component;
 	private ServerResourceContainer src;
 	private APIResourceVersion0 apiVersion0;
 	
-	private Component component;
+	
 	@Before 
 	public void setUp() throws Exception {		
 		component = new Component();
-		src = new ServerResourceContainer();
+		src = ServerResourceContainer.getInstance();
 		apiVersion0 = new APIResourceVersion0(component);
 		src.addAPIResource(apiVersion0);
-		
 		
 	}
 
