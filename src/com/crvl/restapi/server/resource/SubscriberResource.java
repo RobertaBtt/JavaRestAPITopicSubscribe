@@ -37,7 +37,6 @@ public class SubscriberResource extends ServerResource {
     	getRequestEntity();
     	Status status = Status.SUCCESS_OK;
     	String subscriptionResult = "";
-    	String subject = "";
     	
     	try {
 

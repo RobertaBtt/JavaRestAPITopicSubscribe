@@ -3,17 +3,13 @@ import org.json.JSONObject;
 import org.restlet.Component;
 import org.restlet.data.MediaType;
 import org.restlet.data.Protocol;
-import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.engine.connector.HttpProtocolHelper;
 import org.restlet.Server;
 
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-import com.crvl.restapi.model.JSONMessageRepresentation;
 import com.crvl.restapi.server.container.APIResourceVersion0;
 import com.crvl.restapi.server.container.APIResourceVersion1;
 import com.crvl.restapi.server.container.ServerResourceContainer;

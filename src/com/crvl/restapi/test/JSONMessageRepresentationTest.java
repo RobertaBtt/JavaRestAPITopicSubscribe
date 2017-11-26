@@ -1,6 +1,5 @@
 package com.crvl.restapi.test;
 
-import static org.junit.Assert.*;
 
 import org.json.JSONObject;
 import org.junit.Before;

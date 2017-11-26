@@ -12,8 +12,6 @@ public class APIResourceVersion1 implements IAPIResource {
 		component.getDefaultHost().attach("/v/1/subjects", SubjectsResource.class);
 		component.getDefaultHost().attach("/v/1/subject/{id_subject}/subscribe", SubscriberResource.class);
 		component.getDefaultHost().attach("/v/1/subject/{id_subject}/unsubscribe", UnsubscriberResource.class);
-	}
-	
-	
+	}	
 	
 }

@@ -9,10 +9,7 @@ import org.restlet.Component;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
-import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 
-import com.crvl.restapi.model.JSONMessageRepresentation;
 import com.crvl.restapi.server.container.APIResourceVersion0;
 import com.crvl.restapi.server.container.ServerResourceContainer;
 

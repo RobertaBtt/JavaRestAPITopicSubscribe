@@ -56,7 +56,6 @@ public class JSONMessageRepresentation extends Representation {
 
 	@Override
 	public void write(OutputStream arg0) throws IOException {
-		// TODO Auto-generated method stub
 	}
 
 }

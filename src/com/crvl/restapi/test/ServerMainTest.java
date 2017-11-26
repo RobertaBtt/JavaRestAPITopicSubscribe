@@ -6,7 +6,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.restlet.data.Protocol;
-import org.restlet.representation.Representation;
 
 import com.crvl.restapi.main.ServerMain;
 import com.crvl.restapi.server.container.ServerResourceContainer;

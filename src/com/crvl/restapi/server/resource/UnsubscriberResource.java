@@ -5,12 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import org.json.JSONObject;
@@ -18,9 +15,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import com.crvl.restapi.main.ServerMain;
 
-import com.crvl.restapi.model.JSONMessageRepresentation;
 import com.crvl.restapi.server.container.ServerResourceContainer;
-import com.crvl.restapi.test.ServerResourceContainerTest;
 
 public class UnsubscriberResource extends ServerResource {
 	
