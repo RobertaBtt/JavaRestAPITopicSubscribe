@@ -2,11 +2,17 @@ package com.crvl.restapi.test;
 
 import static org.junit.Assert.*;
 
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.restlet.Component;
+import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
+import org.restlet.representation.Representation;
+import org.restlet.representation.StringRepresentation;
 
+import com.crvl.restapi.model.JSONMessageRepresentation;
 import com.crvl.restapi.server.container.APIResourceVersion0;
 import com.crvl.restapi.server.container.ServerResourceContainer;
 
@@ -22,6 +28,8 @@ public class ServerResourceContainerTest {
 	private Component component;
 	private ServerResourceContainer src;
 	private APIResourceVersion0 apiVersion0;
+	private Status status = Status.SUCCESS_OK;
+	private MediaType mediaType = MediaType.APPLICATION_JSON;
 	
 	
 	@Before 
@@ -63,4 +71,9 @@ public class ServerResourceContainerTest {
 		assertEquals("3", src.getVersionFromRequest(reference));
 	}
 
+	@Test
+	public void testPackResult(){
+		assert(src.packResult(status, new JSONObject().put("key",  "value"), mediaType) != null);
+		
+	}
 }

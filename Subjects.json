@@ -1,0 +1,15 @@
+
+[{
+		"identification": "Topic1",
+		"description": "This topic cover all the most important news and opinion about Trump election"
+	},
+	{
+		"identification": "Topic2",
+		"description": "This topic is about Avaaz, the most importan global community that is moving the world."
+	},
+	{
+		"identification": "Topic3",
+		"description": "Clean Code Principles"
+	}
+	
+]

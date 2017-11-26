@@ -38,7 +38,7 @@ public class ServerMain extends ServerResource {
 			component.start();
 		} catch (Exception e) {System.out.println("Error init restlet component" + e.getMessage());	}
 		
-    }
+    } 
     
     public static int getPort(String[] args){
     	int port=DEFAULTPORT;

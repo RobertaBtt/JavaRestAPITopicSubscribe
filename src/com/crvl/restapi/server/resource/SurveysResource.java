@@ -15,33 +15,28 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.crvl.restapi.model.JSONMessageRepresentation;
-
+import com.crvl.restapi.server.container.ServerResourceContainer;
+import com.crvl.restapi.server.container.ServerResourceContainer;
 
 public class SurveysResource extends ServerResource {
 	
+	public final static MediaType MEDIA_TYPE = MediaType.APPLICATION_JSON;
 	
     @Get 
     public Representation getSurveys() {
     	String surveys = "";
+    	Status status = Status.SUCCESS_OK;
+    	
     	try {
     		surveys = new JSONParser().parse(new FileReader("SurveyList.json")).toString();
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
+		}  	catch (FileNotFoundException e1) { status = Status.SERVER_ERROR_INTERNAL;} 
+    		catch (IOException e1) { status = Status.SERVER_ERROR_INTERNAL;} 
+    		catch (ParseException e1) {status = Status.SERVER_ERROR_INTERNAL;	}
     	
-    	
-    	JSONObject data  = new JSONObject();
-    	data.put("surveys", surveys);    	
-    	Status status = Status.SUCCESS_OK;    	
-    	JSONMessageRepresentation message = new JSONMessageRepresentation(status, data);    
-    	
-        Representation result = new StringRepresentation(message.getJsonObjectResponse().toString());        
-        result.setMediaType(MediaType.APPLICATION_JSON);
-        return result;            	
-        
+    	ServerResourceContainer serverResourceContainer = ServerResourceContainer.getInstance();
+    	JSONObject data  = new JSONObject();    	
+    	data.put("surveys", surveys);/*Data: version requested. does not mean it exists.*/    	
+    	return serverResourceContainer.packResult(status, data, MEDIA_TYPE);
+    	    	
     }
 }
