@@ -2,6 +2,7 @@ package com.crvl.restapi.server.resource;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 
 import org.restlet.data.MediaType;
@@ -28,7 +29,16 @@ public class SurveysResource extends ServerResource {
     	Status status = Status.SUCCESS_OK;
     	
     	try {
-    		surveys = new JSONParser().parse(new FileReader("SurveyList.json")).toString();
+    		List<String> subscriptionList = SubscriberResource.getSubscriptions();
+    		if (subscriptionList.size() > 0){
+    			for (int i = 0; i<subscriptionList.size(); i++ ){
+    				surveys += new JSONParser().parse(new FileReader("SurveyList_"+subscriptionList.get(i)+".json")).toString();
+    			}
+    		}
+    		else{
+    			surveys = new JSONParser().parse(new FileReader("SurveyList.json")).toString();	
+    		}
+    		
 		}  	catch (FileNotFoundException e1) { status = Status.SERVER_ERROR_INTERNAL;} 
     		catch (IOException e1) { status = Status.SERVER_ERROR_INTERNAL;} 
     		catch (ParseException e1) {status = Status.SERVER_ERROR_INTERNAL;	}
